@@ -176,6 +176,21 @@ struct convexpoly {
         }
     }
 };
+void dodai(segment hung){
+        double dai = sqrt((hung.b.x-hung.a.x)*(hung.b.x-hung.a.x) + (hung.b.y-hung.a.y)*(hung.b.y-hung.a.y));
+        cout << "Do dai: " << dai << endl;
+};
+void kc(line hung,point baby){
+    double tu = abs(hung.a * baby.x + hung.b * baby.y + hung.c);
+    double mau = sqrt(hung.a * hung.a + hung.b * hung.b);
+    if (mau == 0) {
+        cout << "Duong thang khong hop le (A = B = 0)." << endl;
+    }
+    else{
+    double D = tu / mau;
+    cout << "Khoang cach tu diem den duong thang la: " << D << endl;
+    }
+};
 void menu() {
     cout << "\n=== CHUONG TRINH HINH HOC 2D ===\n";
     cout << "1. Tao diem\n";
@@ -189,11 +204,8 @@ void menu() {
     cout << "9. Tao da giac loi\n";
     cout << "0. Thoat\n";
     cout << "Chon: ";
-}
-void dodai(segment hung){
-        double dai = sqrt((hung.b.x-hung.a.x)*(hung.b.x-hung.a.x) + (hung.b.y-hung.a.y)*(hung.b.y-hung.a.y));
-        cout << "Do dai: " << dai << endl;
-}
+};
+
 int main() {
     int chon;
     
