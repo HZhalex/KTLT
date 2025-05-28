@@ -65,10 +65,19 @@ struct vector{
         cout << endl;
     }
 };
+double khoangCach(point p1, point p2) {
+    return sqrt((p2.x - p1.x) * (p2.x - p1.x) + 
+                (p2.y - p1.y) * (p2.y - p1.y));
+};
 struct triangle{
     point A,B,C;
+    double ab = khoangCach(A,B);
+    double bc = khoangCach(B,C);
+    double ca = khoangCach(C,A);
+    double dienTich = (A.x*(B.y-C.y) + B.x*(C.y-A.y) + C.x*(A.y-B.y))/2.0;
+    double chuvi = ab + bc + ca;
     bool kiemTraTamGiac() {
-        double dienTich = (A.x*(B.y-C.y) + B.x*(C.y-A.y) + C.x*(A.y-B.y))/2.0;
+
         if (dienTich < 0) dienTich = -dienTich;
         return dienTich > 0.001;
     }
@@ -87,8 +96,11 @@ struct triangle{
         A.xuat();
         B.xuat();
         C.xuat();
+        cout <<"Dien tich tam giac la: " << dienTich;
+        cout <<"Chu vi tam giac la: " << chuvi;
     }
 };
+
 struct rectangle {
     point diem[4];
     
@@ -108,6 +120,16 @@ struct rectangle {
             cout << endl;
         }
     }
+    double dienTich() {
+        double canh1 = khoangCach(diem[0], diem[1]);
+        double canh2 = khoangCach(diem[1], diem[2]);
+        return canh1 * canh2;
+    }
+    double chuvi(){
+        double canh1 = khoangCach(diem[0], diem[1]);
+        double canh2 = khoangCach(diem[1], diem[2]);
+        return 2 * (canh1 + canh2);
+    }
 };
 struct circle{
     point a;
@@ -122,6 +144,12 @@ struct circle{
         cout <<"tam duong tron la:";
         a.xuat();
         cout <<"Ban kinh duong trong la:"<<bk;
+    }
+    double dienTich() {
+        return bk*bk*3.14;
+    }
+    double chuvi(){
+        return bk * 2 * 3.14;
     }
 };
 struct convexpoly {
@@ -189,6 +217,53 @@ void kc(line hung,point baby){
     else{
     double D = tu / mau;
     cout << "Khoang cach tu diem den duong thang la: " << D << endl;
+    }
+};
+void goc(vector hung,vector baby){
+    double x1 = hung.t.x - hung.s.x;
+    double y1 = hung.t.y - hung.s.y;
+    double x2 = baby.t.x - baby.s.x;
+    double y2 = baby.t.y - baby.s.y;
+    double dot = x1 * x2 + y1 * y2;
+    double doDaiA = sqrt(x1 * x1 + y1 * y1);
+    double doDaiB = sqrt(x2 * x2 + y2 * y2);
+    double cosTheta = dot / (doDaiA * doDaiB);
+    double theta = acos(cosTheta);
+    cout << "Goc giua 2 vector la: " << theta;
+};
+bool ganBang(double a, double b, double epsilon = 1e-6) {
+    return fabs(a - b) < epsilon;
+};
+void swap(double a,double b){
+    double tmp = a ;
+    a = b ;
+    b = tmp;
+};
+
+void tinhDoDaiCanh(const triangle& t, double& ab, double& bc, double& ca) {
+    ab = khoangCach(t.A, t.B);
+    bc = khoangCach(t.B, t.C);
+    ca = khoangCach(t.C, t.A);
+};
+void xacdinhloaitamgiac(triangle hung){
+    double a,b,c ;
+    tinhDoDaiCanh(hung,a,b,c);
+    if (a > b) swap(a, b);
+    if (b > c) swap(b, c);
+    if (ganBang(a, b) && ganBang(b, c)) {
+        cout << "Tam giac deu." << endl;
+        return;
+    }
+    bool vuong = ganBang(a * a + b * b, c * c);
+    bool can = ganBang(a, b) || ganBang(b, c) || ganBang(a, c);
+    if (vuong && can) {
+        cout << "Tam giac vuong can." << endl;
+    } else if (vuong) {
+        cout << "Tam giac vuong." << endl;
+    } else if (can) {
+        cout << "Tam giac can." << endl;
+    } else {
+        cout << "Tam giac thuong." << endl;
     }
 };
 void menu() {
